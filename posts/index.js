@@ -35,6 +35,12 @@ app.post('/posts', async (req, res) => {
      
 });
 
+app.post('/events', (req, res) =>{
+    console.log('received event in posts ', req.body.type)
+
+    res.send({})
+})
+
 app.listen(4000, () => {
     console.log('Posts service listening on 4000')
 });
