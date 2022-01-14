@@ -7,6 +7,7 @@ const { default: axios } = require('axios');
 const app = express();
 app.use(bodyParser.json())
 app.use(cors())
+
 const commentsByPostId = {}
 
 app.get('/posts/:id/comments', (req,res) => {
@@ -21,7 +22,9 @@ app.post('/posts/:id/comments', async (req,res) => {
 
     const newComment = {
         id: commentId,
-        content
+        content,
+        status:'pending',
+        postId
     }
 
     postComment.push(newComment)
@@ -33,15 +36,36 @@ app.post('/posts/:id/comments', async (req,res) => {
         data: {
             id: commentId,
             content,
-            postId,        
+            postId, 
+            status:'pending'       
         }
     })
 
     res.status(201).send(postComment)
 })
 
-app.post('/events', (req, res) =>{
-    console.log('received event in comments: ', req.body.type)
+app.post('/events', async (req, res) =>{
+    const {type, data} = req.body
+
+    if (type === 'CommentModerated') {
+       const {postId, id, content, status} = data;
+
+       const comments = commentsByPostId[postId]
+       const comment = comments.find((cmmt) => cmmt.id === id );
+
+       comment.status = status;
+
+        await axios.post('http://localhost:4005/events', {
+            type: 'CommentUpdated',
+            data: {
+                postId,
+                id,
+                content,
+                status
+            } 
+        }).catch(err => console.log('error in comments service event 1', err))
+        
+    }
 
     res.send({})
 })
