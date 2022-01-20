@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts # tels the deployment which pod to manage
+  template:
+    metadata:
+      labels:
+        app: posts # match the matchLabels entered in selector
+    spec: 
+        containers:
+          - name: posts
+            image: keyserve/posts:0.0.1 
