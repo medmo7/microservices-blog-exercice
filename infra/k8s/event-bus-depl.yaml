@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: posts-depl
+  name: event-bus-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: posts # tels the deployment which pod to manage
+      app: event-bus # tels the deployment which pod to manage
   template: # describes how pods should be created
     metadata:
       labels:
-        app: posts # match the matchLabels entered in selector
+        app: event-bus # match the matchLabels entered in selector
     spec: 
         containers:
-          - name: posts
-            image: keyserve/posts:latest
+          - name: event-bus
+            image: keyserve/event-bus:latest
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: posts-clusterip-srv
+  name: event-bus-srv
 spec:
   selector:
-    app: posts
+    app: event-bus
   type: ClusterIP # the type is optional if not set default is ClusterIP
   ports:
-    - name: posts
+    - name: event-bus
       protocol: TCP
-      port: 4000
-      targetPort: 4000  
+      port: 4005
+      targetPort: 4005  
