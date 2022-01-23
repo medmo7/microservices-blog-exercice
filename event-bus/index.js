@@ -11,13 +11,13 @@ const events = [];
 
 app.post('/events',(req, res) => {
     const event = req.body
-
+    
     events.push(event);
 
-    axios.post('http://localhost:4000/events', event).catch(error => console.log('error in event bus 1', error))
-    axios.post('http://localhost:4001/events', event).catch(error => console.log('error in event bus 2', error))
-    axios.post('http://localhost:4002/events', event).catch(error => console.log('error in event bus 3', error))
-    axios.post('http://localhost:4003/events', event).catch(error => console.log('error in event bus 4', error))
+    axios.post('http://posts-clusterip-srv:4000/events', event).catch(error => console.log('error in event bus 1', error))
+    // axios.post('http://localhost:4001/events', event).catch(error => console.log('error in event bus 2', error))
+    // axios.post('http://localhost:4002/events', event).catch(error => console.log('error in event bus 3', error))
+    // axios.post('http://localhost:4003/events', event).catch(error => console.log('error in event bus 4', error))
 
     res.send({ status: 'OK'});
 })
