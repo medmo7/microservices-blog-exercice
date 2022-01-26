@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moderation # tels the deployment which pod to manage
+  template: # describes how pods should be created
+    metadata:
+      labels:
+        app: moderation # match the matchLabels entered in selector
+    spec: 
+        containers:
+          - name: moderation
+            image: keyserve/moderation:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  selector:
+    app: moderation
+  type: ClusterIP # the type is optional if not set default is ClusterIP
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 4003
+      targetPort: 4003  

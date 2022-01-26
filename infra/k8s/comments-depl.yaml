@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comments # tels the deployment which pod to manage
+  template: # describes how pods should be created
+    metadata:
+      labels:
+        app: comments # match the matchLabels entered in selector
+    spec: 
+        containers:
+          - name: comments
+            image: keyserve/comments:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  selector:
+    app: comments
+  type: ClusterIP # the type is optional if not set default is ClusterIP
+  ports:
+    - name: comments
+      protocol: TCP
+      port: 4001
+      targetPort: 4001  
