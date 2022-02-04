@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client # tels the deployment which pod to manage
+  template: # describes how pods should be created
+    metadata:
+      labels:
+        app: client # match the matchLabels entered in selector
+    spec: 
+        containers:
+          - name: client
+            image: keyserve/client:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  selector:
+    app: client
+  type: ClusterIP # the type is optional if not set default is ClusterIP
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000  
